@@ -1,0 +1,181 @@
+{
+  "sections": {
+    "section-slideshow": {
+      "type": "section-slideshow",
+      "blocks": {
+        "section-slideshow-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Test_Image_1.png",
+            "image_mobile": "shopify:\/\/shop_images\/Test_imag_2.png",
+            "alignment": "left",
+            "text_color": "default",
+            "title": "Award-Winning BBQ Sauces, Marinades, Seasonings and more!",
+            "text": "<p>Level up your BBQ Game with All Natural - Gluten Free - MSG Free products<\/p>",
+            "link_title": "Shop BBQ Best Sellers",
+            "link": "shopify:\/\/products\/croix-valley-garlic-ginger-teriyaki-wing-and-bbq-booster-1"
+          }
+        }
+      },
+      "block_order": [
+        "section-slideshow-0"
+      ],
+      "settings": {
+        "slideshow_style": "minimal",
+        "title_size": 3,
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "slideshow_height": "small",
+        "slideshow_width": "full",
+        "overlay_strength": 10
+      }
+    },
+    "section-collection": {
+      "type": "section-collection",
+      "settings": {
+        "title": "Crafted in small batches to ensure superior quality",
+        "collection": "hot-sellers",
+        "mobile_layout": "carousel",
+        "grid": 4,
+        "grid_mobile": "1",
+        "rows": 1,
+        "link_title": "View All Hot Sellers",
+        "link": "shopify:\/\/collections\/hot-sellers"
+      }
+    },
+    "4d3bbaa1-4472-4f5e-81e4-f1972c25df7b": {
+      "type": "section-collection-list",
+      "blocks": {
+        "template--15956949336241__4d3bbaa1-4472-4f5e-81e4-f1972c25df7b-1675716790f1526e73-0": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "rubs-and-seasonings"
+          }
+        },
+        "template--15956949336241__4d3bbaa1-4472-4f5e-81e4-f1972c25df7b-1675716790f1526e73-1": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "barbecue-sauces"
+          }
+        },
+        "c56de858-4ae2-4efc-96d4-c0b9bf449af1": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bloody-mary-seasonings"
+          }
+        }
+      },
+      "block_order": [
+        "template--15956949336241__4d3bbaa1-4472-4f5e-81e4-f1972c25df7b-1675716790f1526e73-0",
+        "template--15956949336241__4d3bbaa1-4472-4f5e-81e4-f1972c25df7b-1675716790f1526e73-1",
+        "c56de858-4ae2-4efc-96d4-c0b9bf449af1"
+      ],
+      "settings": {
+        "title": "Impress Your Friends At Every BBQ",
+        "grid": 3,
+        "mobile_layout": "carousel",
+        "link_title": "View all",
+        "link": "",
+        "overlay_strength": 30,
+        "bg_color": "rgba(0,0,0,0)"
+      }
+    },
+    "section-image-grid": {
+      "type": "section-image-grid",
+      "disabled": true,
+      "blocks": {
+        "section-image-grid-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/BBQ_Sauces_Collection.webp",
+            "text_alignment": "bottom",
+            "title": "Sauces",
+            "text": "Crafted in small batches in Hudson, Wisconsin to ensure exacting standards and superior quality.",
+            "link": "shopify:\/\/collections\/barbecue-sauces"
+          }
+        },
+        "section-image-grid-2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Dry_Rubs_Collection_Banner.webp",
+            "text_alignment": "bottom",
+            "title": "Seasonings",
+            "text": "Our seasonings are perfect as a dry rub for the grill or smoker or for an extra shot of flavor on almost anything.",
+            "link": "shopify:\/\/collections\/rubs-and-seasonings"
+          }
+        }
+      },
+      "block_order": [
+        "section-image-grid-0",
+        "section-image-grid-2"
+      ],
+      "settings": {
+        "featured": true,
+        "height": "medium",
+        "width": "large",
+        "overlay_strength": 30
+      }
+    },
+    "8e904297-b95b-4cf4-9701-267b56d8ac78": {
+      "type": "section-image-text",
+      "blocks": {
+        "template--15956949336241__8e904297-b95b-4cf4-9701-267b56d8ac78-1675374712c13496ea-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Damon_and_Lu_2.webp",
+            "bg_color": "#f0f0f0",
+            "title": "learn the croix valley story",
+            "desc": "<p>From humble beginnings in the Northwoods of Wisconsin to the hands of cooks and pitmasters across the globe, find out why we say that we're real people who make really good food.<\/p>",
+            "video": "",
+            "link_title": "check it out",
+            "link": "shopify:\/\/pages\/about-us"
+          }
+        }
+      },
+      "block_order": [
+        "template--15956949336241__8e904297-b95b-4cf4-9701-267b56d8ac78-1675374712c13496ea-0"
+      ],
+      "settings": {
+      }
+    },
+    "32e3105b-7105-4047-ac2c-f9b746d8e933": {
+      "type": "section-collection",
+      "settings": {
+        "title": "Proudly Made  in Hudson, Wisconsin",
+        "collection": "barbecue-sauces",
+        "mobile_layout": "carousel",
+        "grid": 4,
+        "grid_mobile": "1",
+        "rows": 1,
+        "link_title": "View all",
+        "link": "shopify:\/\/collections\/barbecue-sauces"
+      }
+    },
+    "b3ba1c00-8a36-428c-8cb8-190a8de2c587": {
+      "type": "section-blog",
+      "settings": {
+        "title": "This Month's Featured Recipes",
+        "blog": "beef",
+        "post_limit": 2,
+        "grid": 2,
+        "crop": true,
+        "blog_show_date": false,
+        "blog_show_author": false,
+        "blog_show_comments": false,
+        "blog_show_tags": false,
+        "link_title": "View More Award Winning Recipes",
+        "link": "shopify:\/\/blogs\/beef",
+        "bg_color": "rgba(0,0,0,0)"
+      }
+    }
+  },
+  "order": [
+    "section-slideshow",
+    "section-collection",
+    "4d3bbaa1-4472-4f5e-81e4-f1972c25df7b",
+    "section-image-grid",
+    "8e904297-b95b-4cf4-9701-267b56d8ac78",
+    "32e3105b-7105-4047-ac2c-f9b746d8e933",
+    "b3ba1c00-8a36-428c-8cb8-190a8de2c587"
+  ]
+}

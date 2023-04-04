@@ -1,0 +1,66 @@
+<section class="section section-contact-form section--{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="contact-form">
+    <div class="contact-form contact-form--bg-{{ section.settings.background }}">            
+        <div class="container container--tiny container--mob-0">
+            
+            {% unless section.settings.heading == blank %}
+                <div class="section__title section__title--center">
+                    <h2 class="section__title-text h3">{{ section.settings.heading }}</h2>
+                </div>
+            {% endunless %}
+
+            {% form 'contact', class: "contact-form__form" %}
+                {% if form.posted_successfully? %}
+                    <h4 class="contact-form__note form-success">{{ 'contact.form.post_success' | t }}</h4>
+                {% endif %}
+
+                {{ form.errors | default_errors }}
+
+                <div class="o-layout">
+                    <div class="o-layout__item u-1/1 u-1/2@tab">
+                        <label for="ContactFormName">{{ 'contact.form.name' | t }}</label>
+                        <input type="text" id="ContactFormName" name="contact[name]" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+                    </div>
+                    <div class="o-layout__item u-1/1 u-1/2@tab">
+                        <label for="ContactFormEmail" class="{% if form.errors contains 'email' %}label--error{% endif %}">{{ 'contact.form.email' | t }}</label>
+                        <input type="email" id="ContactFormEmail" name="contact[email]" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="{% if form.errors contains 'email' %}input--error{% endif %}">
+                    </div>
+                </div>
+
+                <label for="ContactFormPhone">{{ 'contact.form.phone' | t }}</label>
+                <input type="tel" id="ContactFormPhone" name="contact[phone]" pattern="[0-9\-]*" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+
+                <label for="ContactFormMessage">{{ 'contact.form.message' | t }}</label>
+                <textarea rows="10" id="ContactFormMessage" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+                <input type="submit" class="c-btn c-btn--primary c-btn--center c-btn--full u-mt u-mb-" value="{{ 'contact.form.send' | t }}">
+            {% endform %}
+
+        </div>
+    </div>
+</section>
+
+{% schema %}
+{
+    "name": "Contact form",
+    "class": "js-section__contact-form",
+    "settings": [
+        {
+            "id": "heading",
+            "type": "text",
+            "label": "Heading",
+            "default": "Send us an email"
+        },
+        {
+            "type": "checkbox",
+            "id": "background",
+            "label": "Show background color",
+            "default": true
+        }
+    ],
+    "presets": [
+        {
+            "name": "Contact form"
+        }
+    ]
+}
+{% endschema %}

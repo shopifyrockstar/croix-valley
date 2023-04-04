@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "show_tags": true,
+        "show_rss": false,
+        "grid": 2,
+        "crop": true,
+        "show_blog_date": false,
+        "show_blog_author": false,
+        "show_blog_comments": false,
+        "show_blog_tags": false
+      }
+    },
+    "643e2b78-ffb7-40fd-ba57-74d807885c28": {
+      "type": "section-newsletter",
+      "blocks": {
+        "template--15956949369009__643e2b78-ffb7-40fd-ba57-74d807885c28-1679940478f39849e4-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Subscribe To Receive Recipes Straight To Your Inbox!",
+            "subheading": ""
+          }
+        },
+        "template--15956949369009__643e2b78-ffb7-40fd-ba57-74d807885c28-1679940478f39849e4-1": {
+          "type": "form",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "template--15956949369009__643e2b78-ffb7-40fd-ba57-74d807885c28-1679940478f39849e4-0",
+        "template--15956949369009__643e2b78-ffb7-40fd-ba57-74d807885c28-1679940478f39849e4-1"
+      ],
+      "settings": {
+        "newsletter_bg": "#f0f0f0",
+        "newsletter_style": "default"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "643e2b78-ffb7-40fd-ba57-74d807885c28"
+  ]
+}

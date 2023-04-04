@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "tags": {
+          "type": "tags",
+          "settings": {
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "content": {
+          "type": "content",
+          "settings": {
+          }
+        },
+        "meta": {
+          "type": "meta",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "tags",
+        "title",
+        "content",
+        "meta"
+      ],
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

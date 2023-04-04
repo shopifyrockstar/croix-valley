@@ -1,0 +1,75 @@
+<!-- snippet/product-price.liquid -->
+
+{% comment %}
+    Renders the product price
+
+    Accepts:
+    - product: {Object} Product Liquid object
+    - component: {String} Used for setting unique classes. Values are "product-card", "product-featured" and "product-single".
+    - from_price: {Boolean} Determines whether or not to output a generalised or specific price.
+
+    Usage:
+    {% render 'product-price', product: product, from_price: true %}
+{% endcomment %}
+
+
+{% if from_price %}
+
+    {% if product.title %}
+        {%- assign compare_at_price = product.compare_at_price -%}
+        {%- assign price = product.price -%}
+        {%- assign price_max = product.price_max -%}
+        {%- assign price_varies = product.price_varies -%}
+        {%- assign available = product.available -%}
+    {% else %}
+        {%- assign compare_at_price = 1999 -%}
+        {%- assign price = 1999 -%}
+        {%- assign price_varies = false -%}
+        {%- assign available = true -%}
+    {% endif %}
+
+    {%- assign money_price = price | money -%}
+    {%- assign money_price_max = price_max | money -%}
+
+    {% if compare_at_price > price %}
+        <span class="{{ component }}__price-price{% unless price_varies %} {{ component }}__price-price--sale{% endunless %}">
+            {% if price_varies %}{{ 'products.general.from_price' | t }} {% endif %}
+            <span class="money">{{ money_price }}</span>
+        </span>
+        {% unless price_varies %}
+            <strike class="{{ component }}__price-cross"><span class="money">{{ compare_at_price | money }}</span></strike>
+        {% endunless %}
+    {% else %}
+        <span class="{{ component }}__price-price">{% if price_varies %}{{ 'products.general.from_price' | t }} {% endif %}<span class="money">{{ money_price }}</span></span>
+    {% endif %}
+
+{% else %}
+
+    <div class="{{ component }}__price js-product-price">
+        <div class="{{ component }}__price-text js-product-price-text">
+            <span class="u-hidden-visually">{{ 'products.general.regular_price' | t }}</span>
+            <span class="js-product-price-number">
+                <span class="{{ component }}__price-number{% if product.compare_at_price_max > product.price %} {{ component }}__price-number--sale{% endif %}">
+                    <span class="money">{% if component == 'product-featured' %}{{ price | money }}{% else %}{{ product.selected_or_first_available_variant.price | money }}{% endif %}</span>
+                </span>
+            </span>
+            {% if product.compare_at_price_max > product.price %}
+            <span class="u-hidden-visually">{{ 'products.general.sale_price' | t }}</span>
+            <span class="js-product-price-compare">
+                <s class="{{ component }}__price-compare"><span class="money">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span></s>
+            </span>
+            {% endif %}
+        </div>
+        {% unless component == 'product-card' %}
+            <div class="{{ component }}__price__notes">
+                <p class="{{ component }}__price__note {{ component }}__price__note--unit js-price-unit-note">
+                    {% render 'product-unit-price', product: product, variant: product.selected_or_first_available_variant %}
+                </p>
+                {% if show_tax_notice == true %}
+                <p class="{{ component }}__price__note {{ component }}__price__note--tax">{{ 'products.general.include_taxes_html' | t }}</p>
+                {% endif %}
+            </div>
+        {% endunless %}
+    </div>
+
+{% endif %}

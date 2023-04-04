@@ -1,0 +1,76 @@
+<section class="section{% if collection.image and section.settings.show_collection_image or collection.description != blank %} section--mb-0{% endif %} section--{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="collection-template">
+
+    <div class="collection collection--sidebar-{{ section.settings.sidebar_layout }}{% if collection.image and section.settings.show_collection_image %} collection--img{% endif %}{% if section.settings.center_title %} collection--center{% endif %}">
+
+        <div class="container">
+            <div class="collection__header{% if collection.image and section.settings.show_collection_image %} collection__header--img{% endif %}">
+                {% if collection.image and section.settings.show_collection_image %}
+                    <div class="collection__header-media o-ratio o-ratio--{{ section.settings.collection_image_height }}" style="background-image: url('{{ collection.image | img_url: '1x1' }}')">
+                        <img
+                            class="collection__header-img collection__header-img--{{ section.id }}"
+                            src="{{ collection.image | img_url: '600x' }}"
+                            srcset="{% render 'bgset', image: collection.image %}"
+                            width="600"
+                            height="{{ 600 | divided_by: collection.image.aspect_ratio | round }}"
+                            sizes="calc(100vw - 60px)"
+                            alt="{{ collection.image.alt }}"
+                            loading="eager"
+                        />
+                    </div>
+                {% endif %}
+                <div class="collection__header-info">
+                    <div class="section__title collection__header-info__title{% if section.settings.center_title %} section__title--center{% endif %}">
+                        <h1 class="section__title-text collection__header-info__title-text">{{ collection.title }}</h1>
+                    </div>
+                    {% if collection.description != blank %}
+                        <div class="collection__header-info__text rte rte--header">
+                            {{ collection.description }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section> 
+
+{% schema %}
+{
+    "name": "Collection banner",
+    "class": "js-section__collection",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "center_title",
+            "label": "Center heading and text",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "show_collection_image",
+            "label": "Show image",
+            "default": true
+        },
+        {
+            "type": "select",
+            "id": "collection_image_height",
+            "label": "Image height",
+            "default": "3:1",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "4:1"
+                },
+                {
+                    "label": "Medium",
+                    "value": "3:1"
+                },
+                {
+                    "label": "Large",
+                    "value": "5:2"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

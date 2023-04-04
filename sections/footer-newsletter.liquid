@@ -1,0 +1,124 @@
+<style type="text/css">
+    .section--{{ section.id }} .newsletter {
+        background-color: {{ section.settings.newsletter_bg }};
+    }
+</style>
+
+{% if section.settings.footer_newsletter_enable %}
+    {% if section.settings.footer_newsletter_home == false or template.name != 'index' %}
+        <section class="section section--{{ section.id }}">
+            <div class="container">
+
+                <div class="newsletter newsletter--{{ section.settings.newsletter_style }}">
+                    <div class="newsletter__content">
+
+                        <div class="newsletter__title section__title section__title--center section__title--desc">
+                            {% if section.settings.footer_newsletter_title != blank %}
+                                <h2 class="section__title-text">{{ section.settings.footer_newsletter_title | escape }}</h2>
+                            {% endif %}
+                            {% if section.settings.footer_newsletter_desc != blank %}
+                                <div class="section__title-desc rte">{{ section.settings.footer_newsletter_desc }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="newsletter__form-wrapper">
+                            {% form 'customer', id: 'newsletter', class: 'newsletter__form-form' %}
+                                {{ form.errors | default_errors }}
+                                {% if form.posted_successfully? %}
+                                    <div class="newsletter__form-message">
+                                        <h3 class="newsletter__form-message__text">{{ 'general.newsletter_form.confirmation' | t }}</h3>
+                                    </div>
+                                {% else %}
+                                    <div class="o-layout o-layout--flush">
+                                        <div class="o-layout__item u-1/1 u-2/3@tab">
+                                            <input type="hidden" name="contact[tags]" value="newsletter">
+                                            <label for="Email-Footer" class="u-hidden-visually">Email</label>
+                                            <input type="email"
+                                                    name="contact[email]"
+                                                    id="Email-Footer"
+                                                    class="newsletter__input"
+                                                    value="{% if customer %}{{ customer.email }}{% endif %}"
+                                                    placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}"
+                                                    autocorrect="off"
+                                                    autocapitalize="off">
+                                        </div>
+                                        <div class="o-layout__item u-1/1 u-1/3@tab">
+                                            <button type="submit" class="c-btn c-btn--full c-btn--primary newsletter__btn" name="commit" id="Subscribe-Footer">{{ 'general.newsletter_form.submit' | t }}</button>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endform %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Newsletter",
+    "class": "js-section__footer-newsletter",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "footer_newsletter_enable",
+            "label": "Show newsletter signup",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "footer_newsletter_home",
+            "label": "Hide on home page",
+            "default": false
+        },
+        {
+            "type": "color",
+            "id": "newsletter_bg",
+            "label": "Background color",
+            "default": "#f0f0f0"
+        },
+        {
+            "type": "select",
+            "id": "newsletter_style",
+            "label": "Text color",
+            "default": "default",
+            "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "default-light",
+                    "label": "Default light"
+                },
+                {
+                    "value": "dark",
+                    "label": "Dark"
+                },
+                {
+                    "value": "light",
+                    "label": "Light"
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "id": "footer_newsletter_title",
+            "label": "Heading",
+            "default": "Newsletter"
+        },
+        {
+            "type": "richtext",
+            "id": "footer_newsletter_desc",
+            "label": "Subheading",
+            "default": "<p>Let your customers know what to expect if they sign up to your mailing list.</p>"
+        },
+        {
+            "type": "paragraph",
+            "content": "Every sign up will create a 'Customer account' in this store. [Manage customers](/admin/customers?query=&accepts_marketing=1)"
+        }
+    ]
+}
+{% endschema %}

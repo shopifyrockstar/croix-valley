@@ -1,0 +1,110 @@
+{% comment %}
+  	This is used to create CSS custom variables with Liquid references
+{% endcomment %}
+
+{% assign base_font = settings.type_base_font %}
+{% assign header_font = settings.type_header_font %}
+
+{% if settings.type_button_style == 'body' %}
+	{%- assign button_font = settings.type_base_font -%}
+{% else %}
+	{%- assign button_font = settings.type_header_font -%}
+{% endif %}
+
+{%- assign color_shadow_opacity = settings.color_shadow_opacity | times: 0.01 -%}
+{%- assign drop_shadow = settings.color_shadow | color_modify: 'alpha', color_shadow_opacity -%}
+
+{%- assign scaledMax = 1.25 -%}
+{%- assign scaledMin = 0.75 -%}
+{%- assign rangeMax = 150 -%}
+{%- assign rangeMin = 50 -%}
+
+{%- assign scaledDiff = scaledMax | minus: scaledMin -%}
+{%- assign rangeDiff = rangeMax | minus: rangeMin -%}
+
+{%- assign heading_scale_dif = settings.type_header_scale | minus: rangeMin -%}
+{%- assign heading_size = scaledDiff | times: heading_scale_dif | divided_by: 100.0 | plus: scaledMin -%}
+
+{%- assign grid_scale_dif = settings.type_grid_scale | minus: rangeMin -%}
+{%- assign grid_size = scaledDiff | times: grid_scale_dif | divided_by: 100.0 | plus: scaledMin -%}
+
+{%- assign nav_scale_dif = settings.type_nav_scale | minus: rangeMin -%}
+{%- assign nav_size = scaledDiff | times: nav_scale_dif | divided_by: 100.0 | plus: scaledMin -%}
+
+{%- assign button_scale_dif = settings.type_button_scale | minus: rangeMin -%}
+{%- assign button_size = scaledDiff | times: button_scale_dif | divided_by: 100.0 | plus: scaledMin -%}
+
+{%- assign base_size = settings.type_base_scale | minus: 100 | divided_by: 10.0 | times: 0.4 | plus: 14 -%}
+
+{% style %}
+
+:root {
+	--color--brand: {{ settings.color_brand }};
+	--color--brand-dark: {{ settings.color_brand | color_darken: 5 }};
+	--color--brand-light: {{ settings.color_brand | color_lighten: 5 }};
+
+	--color--accent: {{ settings.color_accent }};
+	--color--accent-dark: {{ settings.color_accent | color_darken: 5 }};
+
+	--color--link: {{ settings.color_brand | color_lighten: 30 }};
+	--color--link-dark: {{ settings.color_brand | color_darken: 30 }};
+
+	--color--text: {{ settings.color_text }};
+	--color--text-light: {{ settings.color_text | color_modify: 'alpha', 0.7 }};
+	--color--text-lighter: {{ settings.color_text | color_modify: 'alpha', 0.55 }};
+	--color--text-lightest: {{ settings.color_text | color_modify: 'alpha', 0.2 }};
+	--color--text-bg: {{ settings.color_text | color_modify: 'alpha', 0.1 }};
+
+	--color--text-bg: {{ settings.color_text | color_modify: 'alpha', 0.1 }};
+
+	--color--headings: {{ settings.color_headings }};
+	--color--alt-text: {{ settings.color_alt_text }};
+	--color--btn: {{ settings.color_button }};
+
+	--color--product-bg: {{ settings.product_grid_bg }};
+	--color--product-sale: {{ settings.product_grid_sale_color }};
+
+	--color--drawer-bg: {{ settings.color_drawer_bg }};
+
+	--color--bg: {{ settings.color_bg }};
+	--color--bg-alpha: {{ settings.color_bg | color_modify: 'alpha', 0.8 }};
+	--color--bg-light: {{ settings.color_bg | color_lighten: 5 }};
+	--color--bg-dark: {{ settings.color_bg | color_darken: 5 }};
+
+	--color--drop-shadow: {{ drop_shadow }};
+
+	--font--size-base: {{ base_size }};
+	--font--line-base: 30;
+
+	--font--size-h1: {{ base_size | plus: 16 | times: heading_size | round }};
+	--font--size-h2: {{ base_size | plus: 10 | times: heading_size | round }};
+	--font--size-h3: {{ base_size | plus: 6 | times: heading_size | round }};
+	--font--size-h4: {{ base_size | plus: 4 | times: heading_size | round }};
+	--font--size-h5: {{ base_size | plus: 2 | times: heading_size | round }};
+	--font--size-h6: {{ base_size }};
+
+	--font--size-grid: {{ base_size | times: grid_size | round }};
+	--font--size-nav: {{ base_size | times: nav_size | round }};
+
+	--font--body: {{ base_font.family }}, {{ base_font.fallback_families }};
+	--font--body-style: {{ base_font.style }};
+    --font--body-weight: {{ base_font.weight }};
+
+    --font--title: {{ header_font.family }}, {{ header_font.fallback_families }};
+	--font--title-weight: {{ header_font.weight }};
+	--font--title-style: {{ header_font.style }};
+	--font--title-space: {{ settings.type_header_letterspace }}px;
+	--font--title-transform: {% if settings.type_header_capitalize %}uppercase{% else %}normal{% endif %};
+	--font--title-border: {% if settings.type_header_underline %}1{% else %}0{% endif %};
+	--font--title-border-size: {{ settings.type_header_underline_size }}px;
+
+	--font--button: {{ button_font.family }}, {{ button_font.fallback_families }};
+	--font--button-weight: {{ button_font.weight }};
+	--font--button-style: {{ button_font.style }};
+
+	--font--button-space: {{ settings.type_button_letterspace }}px;
+	--font--button-transform: {% if settings.type_button_capitalize %}uppercase{% else %}normal{% endif %};
+	--font--button-size: {{ base_size | times: button_size | round }};
+	--font--button-mobile-size: 12px;
+}
+{% endstyle %}

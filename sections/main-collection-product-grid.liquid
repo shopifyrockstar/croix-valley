@@ -1,0 +1,553 @@
+<style>
+.mfp-container .collection-sidebar,
+.mfp-container .collection-sidebar .mfp-close {
+    background-color: {{ settings.color_drawer_bg }};
+}
+</style>
+{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+{%- assign limit = section.settings.grid | times: section.settings.rows -%}
+{%- assign filter_exists = false -%}{%- for block in section.blocks -%}{%- if block.type == 'filter' -%}{%- assign filter_exists = true -%}{%- endif -%}{%- endfor -%}
+{%- assign show_main_sort = false -%}{%- if section.settings.show_sidebar == false or filter_exists == false -%}{%- if section.settings.sort_enable -%}{%- assign show_main_sort = true -%}{%- endif -%}{%- endif -%}
+
+{% paginate collection.products by limit %}
+<section class="section section--{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="collection-template">
+
+    <div class="collection collection--sidebar-sidebar{% if collection.image and section.settings.show_collection_image %} collection--img{% endif %}{% if section.settings.center_title %} collection--center{% endif %}">
+
+        {%- assign mobile_sizes = 100 | divided_by: section.settings.grid_mobile -%}
+        {%- assign sizes = mobile_sizes -%}
+        {% case section.settings.grid %}
+            {% when 2 %}
+                {%- assign grid_item_width = 'u-1/2@phab' -%}
+                {%- assign image_size = '740x' -%}
+                {% if section.settings.show_sidebar and section.blocks.size > 0 %}
+                    {%- assign container_size = 'default' -%}
+                    {%- assign sizes = '(min-width: 981px) calc((80vw - 120px) / 2), (min-width: 768px) calc((100vw - 66px) / 2), (min-width: 561px) calc((100vw - 51px) / 2), calc(' | append: mobile_sizes | append: 'vw - 54px)' -%}
+                {% else %}
+                    {%- assign container_size = 'large' -%}
+                    {%- assign sizes = '(min-width: 981px) calc((100vw - 90px) / 2), (min-width: 768px) calc((100vw - 66px) / 2), (min-width: 561px) calc((100vw - 51px) / 2), calc(' | append: mobile_sizes | append: 'vw - 54px)' -%}
+                {% endif %}
+            {% when 3 %}
+                {%- assign grid_item_width = 'u-1/2@phab u-1/3@tab' -%}
+                {%- assign image_size = '520x' -%}
+                {% if section.settings.show_sidebar and section.blocks.size > 0 %}
+                    {%- assign container_size = 'default' -%}
+                    {%- assign sizes = '(min-width: 981px) calc((80vw - 150px) / 3), (min-width: 768px) calc((100vw - 96px) / 3), (min-width: 561px) calc((100vw - 66px) / 2), calc(' | append: mobile_sizes | append: 'vw - 54px)' -%}
+                {% else %}
+                    {%- assign container_size = 'large' -%}
+                    {%- assign sizes = '(min-width: 981px) calc((100vw - 120px) / 3), (min-width: 768px) calc((100vw - 96px) / 3), (min-width: 561px) calc((100vw - 66px) / 2), calc(' | append: mobile_sizes | append: 'vw - 54px)' -%}
+                {% endif %}
+            {% when 4 %}
+                {% if section.settings.show_sidebar and section.blocks.size > 0 %}
+                    {%- assign grid_item_width = 'u-1/3@tab u-1/4-grid-desk' -%}
+                    {%- assign sizes = '(min-width: 1366px) calc((80vw - 144px) / 4), (min-width: 981px) calc((80vw - 126px) / 3), (min-width: 768px) calc((100vw - 66px) / 3), (min-width: 561px) calc((100vw - 51px) / 2), calc(' | append: mobile_sizes | append: 'vw - 54px)' -%}
+                {% else %}
+                    {%- assign grid_item_width = 'u-1/3@tab u-1/4@desk' -%}
+                    {%- assign sizes = '(min-width: 981px) calc((100vw - 105px) / 4), (min-width: 768px) calc((100vw - 66px) / 3), (min-width: 561px) calc((100vw - 51px) / 2), calc(' | append: mobile_sizes | append: 'vw - 54px)' -%}
+                {% endif %}
+                {%- assign image_size = '380x' -%}
+                {%- assign container_size = 'default' -%}
+        {% endcase %}
+
+        <div class="container container--{{ container_size }}">
+            <div class="collection-main" id="collection-main">
+
+                <div class="collection-main__actions">
+                    {% comment %}Sidebar blocks count{% endcomment %}
+                    {% if section.settings.show_sidebar and section.blocks.size > 0 %}
+                        <div class="collection-main__filter">
+                            <a href="#" class="collection-main__filter-btn c-btn c-btn--primary c-btn--full js-collection-draw-trigger">
+                            {%- if show_main_sort == false and section.settings.sort_enable -%}
+                                {{ 'collections.general.filter_sort_label' | t }}
+                            {%- else -%}
+                                {{ 'collections.general.filter_label' | t }}
+                            {%- endif -%}
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% comment %}Sidebar blocks count{% endcomment %}
+
+                    {% if show_main_sort %}
+                        <form>
+                            <div class="collection-main__sort ">
+                                <div class="selector-wrapper collection-main__sort__selector">
+                                    <label class="collection-filters__label" for="SortBy">{{ 'collections.sorting.title' | t }}</label>
+
+                                    {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                                    <select name="sort_by" class="select__select js-collection-sort" id="SortBy">
+                                        {%- for option in collection.sort_options -%}
+                                            <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
+                                        {%- endfor -%}
+                                    </select>
+
+                                    <noscript>
+                                        <input type="submit" class="c-btn c-btn--primary" value="{{ 'collections.sorting.sort_button' | t }}">
+                                    </noscript>
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <div class="collection-products{% if show_main_sort == false and section.settings.sort_enable %} collection-products--sort-enabled{% endif %}">
+
+                    {% comment %}Sidebar blocks count{% endcomment %}
+                    {% if section.settings.show_sidebar and section.blocks.size > 0 %}
+                    <div class="o-layout">
+
+                        <div class="o-layout__item u-1/1 u-1/4-sidebar-desk u-1/5-sidebar-wide">
+                            <aside class="collection-sidebar collection-sidebar--{{ settings.color_drawer_style }} js-collection-draw">
+                                <div class="collection-sidebar__wrapper">
+                                    
+                                    {%- assign filter_count = 0 -%}
+                                    {%- for filter in collection.filters -%}
+                                        {%- assign filter_count = filter_count | plus: filter.active_values.size -%}
+                                    {%- endfor -%}
+
+                                    {% for block in section.blocks %}
+
+                                        {% if block.type == 'filter' %}
+                                            <div class="collection-sidebar__section collection-sidebar__section--filter collection-sidebar__filter" {{ block.shopify_attributes }}>
+
+                                                <form class="collection-sidebar__filter-form">
+                                                    {% if section.settings.sort_enable %}
+                                                        <div class="collection-sidebar__filter__sort ">
+                                                            <div class="selector-wrapper collection-sidebar__filter__sort__selector">
+                                                                <label class="collection-filters__label" for="SortBy">{{ 'collections.sorting.title' | t }}</label>
+                                                                
+                                                                {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                                                                <select name="sort_by" class="select__select collection-filters__sort js-collection-sort" id="SortBy">
+                                                                    {%- for option in collection.sort_options -%}
+                                                                        <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
+                                                                    {%- endfor -%}
+                                                                </select>
+
+                                                                <noscript>
+                                                                    <input type="submit" class="c-btn c-btn--primary" value="{{ 'collections.sorting.sort_button' | t }}">
+                                                                </noscript>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+
+                                                    {%- if block.settings.title != blank -%}
+                                                        <h4 class="collection-sidebar__title h5">
+                                                            {{ block.settings.title | escape }}
+                                                        </h4>
+                                                    {%- endif -%}
+
+                                                    {%- for filter in collection.filters -%}
+                                                        
+                                                        {%- case filter.type -%}
+                                                            {%- when 'list' -%}
+
+                                                                <div class="collection-sidebar__filter-group">
+
+                                                                    <a href="#filter-{{ forloop.index }}" class="collection-sidebar__filter-trigger js-accordion-trigger{% if forloop.index < 4 or filter.active_values.size > 0 %} js-accordion-trigger-default-open{% endif %}" aria-expanded="false" {{ block.shopify_attributes }}>
+                                                                        <span class="collection-sidebar__filter__title">{{ filter.label }}</span>
+                                                                        <span class="collection-sidebar__filter__title-icon">
+                                                                            <i class="icon icon--plus" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </a>
+
+                                                                    <div id="filter-{{ forloop.index }}" class="collection-sidebar__filter__accordion js-accordion-info">
+                                                                        <ul class="collection-sidebar__items o-list-bare">
+                                                                            {%- for filter_value in filter.values -%}
+                                                                                <li class="collection-sidebar__item{% if filter_value.count == 0 and filter_value.active == false %} collection-sidebar__item--disabled{% endif %}">
+                                                                                    <input type="checkbox"
+                                                                                        name="{{ filter_value.param_name }}"
+                                                                                        value="{{ filter_value.value }}"
+                                                                                        class="collection-sidebar__filter__input"
+                                                                                        id="Filter-{{ filter.label }}-{{ forloop.index }}"
+                                                                                        {% if filter_value.active -%} checked{%- endif %}
+                                                                                        {% if filter_value.count == 0 and filter_value.active == false %} disabled{% endif %}
+                                                                                    >
+                                                                                    <label for="Filter-{{ filter.label }}-{{ forloop.index }}" class="collection-sidebar__link js-filter-label">
+                                                                                        <span class="collection-sidebar__link__box">
+                                                                                            <i class="icon icon--tick" aria-hidden="true"></i>
+                                                                                        </span>
+                                                                                        {{ filter_value.label | escape }} 
+                                                                                        {% if block.settings.count %}
+                                                                                            <span class="collection-sidebar__link__count">{{ filter_value.count }}</span>
+                                                                                        {% endif %}
+                                                                                    </label>
+                                                                                </li>
+                                                                            {%- endfor -%}
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+
+                                                            {%- when 'price_range' -%}
+
+                                                                <div class="collection-sidebar__filter-group collection-sidebar__filter-group--price">
+
+                                                                    <a href="#filter-{{ forloop.index }}" class="collection-sidebar__filter-trigger js-accordion-trigger{% if forloop.index < 4 or filter.active_values.size > 0 %} js-accordion-trigger-default-open{% endif %}"  aria-expanded="false" {{ block.shopify_attributes }}>
+                                                                        <span class="collection-sidebar__filter__title">{{ filter.label }}</span>
+                                                                        <span class="collection-sidebar__filter__title-icon">
+                                                                            <i class="icon icon--plus" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </a>
+
+                                                                    <div id="filter-{{ forloop.index }}" class="collection-sidebar__filter__accordion js-accordion-info">
+                                                                        <div class="collection-sidebar__items">
+                                                                            <div class="price-range">
+                                                                              
+                                                                                {%- assign price_filter_min_value = filter.min_value.value | divided_by: 100 -%}
+                                                                                {%- assign price_filter_max_value = filter.max_value.value | divided_by: 100 -%}
+                                                                                {%- assign price_filter_range_max = filter.range_max | divided_by: 100 -%}
+                                                                                                                                                             
+                                                                                <div class="collection-sidebar__filter-price">
+                                                                                  
+                                                                                    <div class="collection-sidebar__filter-price__item collection-sidebar__filter-price__item--from">
+                                                                                        <span class="collection-sidebar__filter-price__currency">{{ cart.currency.symbol }}</span>
+
+                                                                                        <input name="{{ filter.min_value.param_name }}"
+                                                                                          id="Filter-{{ filter.label }}-min-{{ forloop.index }}"
+                                                                                          class="collection-sidebar__filter-price__input price-range__number"
+                                                                                          {% if filter.min_value.value -%}
+                                                                                            value="{{ price_filter_min_value }}"
+                                                                                          {%- endif %}
+                                                                                          type="number"
+                                                                                          inputmode="numeric"
+                                                                                          placeholder="0"
+                                                                                          min="0"
+                                                                                          max="{{ price_filter_range_max }}"
+                                                                                        >
+                                                                                        <label for="Filter-{{ filter.label }}-min-{{ forloop.index }}" class="collection-sidebar__filter-price__label">{{ 'collections.general.from' | t }}</label>
+                                                                                    </div>
+
+                                                                                    <div class="collection-sidebar__filter-price__item collection-sidebar__filter-price__item--separator">-</div>
+
+
+                                                                                    <div class="collection-sidebar__filter-price__item collection-sidebar__filter-price__item--to">
+                                                                                        <span class="collection-sidebar__filter-price__currency">{{ cart.currency.symbol }}</span>
+                                                                                        <input name="{{ filter.max_value.param_name }}"
+                                                                                          id="Filter-{{ filter.label }}-max-{{ forloop.index }}"
+                                                                                          class="collection-sidebar__filter-price__input price-range__number"
+                                                                                          {% if filter.max_value.value -%}
+                                                                                            value="{{ price_filter_max_value }}"
+                                                                                          {%- endif %}
+                                                                                          type="number"
+                                                                                          inputmode="numeric"
+                                                                                          placeholder="{{ price_filter_range_max }}"
+                                                                                          min="0"
+                                                                                          max="{{ price_filter_range_max }}"
+                                                                                        >
+
+                                                                                        <label for="Filter-{{ filter.label }}-max-{{ forloop.index }}" class="collection-sidebar__filter-price__label">{{ 'collections.general.to' | t }}</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                <div class="price-range__group">
+                                                                                    <div class="price-range__track">
+                                                                                        <label class="u-hidden-visually" for="Filter-Price-Track-1">Price range mininum</label>
+                                                                                        <input class="price-range__input" 
+                                                                                            {%- if filter.min_value.value -%}
+                                                                                                value="{{ price_filter_min_value }}"
+                                                                                            {%- else -%}
+                                                                                                value="0"
+                                                                                            {%- endif -%}
+                                                                                            min="0" 
+                                                                                            max="{{ price_filter_range_max }}" 
+                                                                                            type="range"
+                                                                                            tabindex="-1"
+                                                                                            id="Filter-Price-Track-1"
+                                                                                        >
+                                                                                        <label class="u-hidden-visually" for="Filter-Price-Track-2">Price range maximum</label>
+                                                                                        <input class="price-range__input" 
+                                                                                            {%- if filter.max_value.value -%}
+                                                                                                value="{{ price_filter_max_value }}"
+                                                                                            {%- else -%}
+                                                                                                value="{{ price_filter_range_max }}"
+                                                                                            {%- endif -%}
+                                                                                            min="0" 
+                                                                                            max="{{ price_filter_range_max }}"
+                                                                                            type="range"
+                                                                                            tabindex="-1"
+                                                                                            id="Filter-Price-Track-2"
+                                                                                        >
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                        {%- endcase -%}
+                                                    {%- endfor -%}
+
+                                                    <noscript>
+                                                        <input type="submit" class="collection-sidebar__filter-submit c-btn c-btn--primary" value="{{ 'collections.general.apply' | t }}">
+                                                    </noscript>
+
+                                                </form>
+                                            </div>
+
+                                        {% endif %}
+                                        {% if block.type == 'linklist' %}
+                                            {% if linklists[block.settings.linklist].links.size > 0 %}
+                                                <div class="collection-sidebar__section" {{ block.shopify_attributes }}>
+                                                    <h4 class="collection-sidebar__title h5">{{ linklists[block.settings.linklist].title }}</h4>
+                                                    <ul class="collection-sidebar__items o-list-bare">
+                                                        {% for link in linklists[block.settings.linklist].links %}
+                                                            <li class="collection-sidebar__item{% if link.active %} collection-sidebar__item--active{% endif %}">
+                                                                <a href="{{ link.url }}" class="collection-sidebar__link">{{ link.title }}</a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if block.type == 'tags' %}
+                                            {% if collection.all_tags.size > 0 %}
+                                                <div class="collection-sidebar__section collection-sidebar__section--tags" {{ block.shopify_attributes }}>
+                                                    <h4 class="collection-sidebar__title h5">
+                                                        {{ block.settings.title | escape }}
+                                                    </h4>
+                                                    <ul class="collection-sidebar__items o-list-bare">
+                                                        {% for tag in collection.all_tags %}
+                                                            {% if current_tags contains tag %}
+                                                                <li class="collection-sidebar__item collection-sidebar__item--active">
+                                                                    {{ tag | link_to_remove_tag: tag | replace: ' title', ' class="collection-sidebar__link" title' }}
+                                                                </li>
+                                                            {% endif %}
+                                                            {% unless current_tags contains tag %}
+                                                                <li class="collection-sidebar__item">
+                                                                    {{ tag | link_to_add_tag: tag | replace: ' title', ' class="collection-sidebar__link" title' }}
+                                                                </li>
+                                                            {% endunless %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                    {% if current_tags %}
+                                                        <div class="collection-sidebar__section collection-sidebar__section--group-clear">
+                                                            <a href="{{ collection.url }}" class="c-btn c-btn--small c-btn--light c-btn--close">{{ 'collections.general.tags_clear_filters' | t }}</a>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </aside>
+                        </div>
+
+                        <div class="o-layout__item u-1/1 u-3/4-sidebar-desk u-4/5-sidebar-wide">
+
+                    {% endif %}
+                    {% comment %}Sidebar blocks count{% endcomment %}
+                            
+                            <div class="collection__filters-active">             
+                                <div class="collection__filters-active__wrapper">
+                                    <a href="{{ collection.url }}?sort_by={{ sort_by }}" class="collection__filters-active__filter collection__filters-active__filter--clear">{{ 'collections.general.tags_clear_all' | t }}</a>
+                                    {%- for filter in collection.filters -%}
+                                        {%- for filter_value in filter.active_values -%}
+                                            <a class="collection__filters-active__filter" href="{{ filter_value.url_to_remove }}">{{ filter_value.label | escape }}</a>
+                                        {%- endfor -%}
+
+                                        {% if filter.type == "price_range" %}
+                                            {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                                                <a href="{{ filter.url_to_remove }}" class="collection__filters-active__filter">
+                                                    <span>
+                                                        {% if filter.min_value.value %}
+                                                            {{ filter.min_value.value | money }}
+                                                        {% else %}
+                                                            {{ 0 | money }}
+                                                        {% endif %} 
+                                                         -  
+                                                        {% if filter.max_value.value %}
+                                                            {{ filter.max_value.value | money }}
+                                                        {% else %}
+                                                            {{ filter.range_max | money }}
+                                                        {% endif %}
+                                                    </span>
+                                                </a>
+                                            {%- endif -%}
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                </div>
+                            </div>
+                            
+                            <div class="o-layout{% if settings.product_grid_masonry %} o-layout--masonry{% endif %}{% if section.settings.grid == 4 %} o-layout--small{% endif %}{% if section.settings.grid_mobile == '2' %} o-layout--small@tab-down{% endif %}">
+                                {% for product in collection.products %}
+                                    <div class="o-layout__item u-1/{{ section.settings.grid_mobile }} {{ grid_item_width }}">
+                                        {% render 'product-grid-item', product: product, page: 'collection', image_sizes: sizes %}
+                                    </div>
+                                {% else %}
+                                    {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
+                                        {% comment %}
+                                            Add default products to help with onboarding for collections/all only.
+                                        {% endcomment %}
+                                        {% for i in (1..8) %}
+                                            <div class="o-layout__item u-1/{{ section.settings.grid_mobile }} {{ grid_item_width }}">
+                                                <a href="#" class="product-card-link home-products__link">
+                                                    <div class="product-card{% if settings.product_grid_align %} product-card--center{% else %} product-card--left{% endif %}">
+                                                        <div class="product-card__media">
+                                                            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                                                            {{ 'product-' | append: current | placeholder_svg_tag: 'product-card__img placeholder-svg placeholder-svg--light' }}
+                                                        </div>
+                                                        <div class="product-card__details">
+                                                            <h3 class="product-card__title">{{ 'homepage.onboarding.product_title' | t }}</h3>
+                                                            {% if settings.product_grid_vendor %}
+                                                                <p class="product-card__vendor">{{ 'homepage.onboarding.product_vendor' | t }}</p>
+                                                            {% endif %}
+                                                            <p class="product-card__price">
+                                                                {% render 'product-price', product: product %}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="o-layout__item u-1/1">
+                                            <div class="collection-empty">
+                                                {%- if filter_count > 0 -%}
+                                                    <a href="{{ collection.url }}" class="link link--underline">{{ 'collections.general.filter_reset' | t }}</a>
+                                                {%- endif -%}
+                                                <h5 class="collection-empty__title">{{ 'collections.general.no_matches' | t }}</h5>
+                                                <span class="emoji collection-empty__emoji">
+                                                    <i class="icon icon--confused"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                    {% comment %}Sidebar blocks count{% endcomment %}
+                    {% if section.settings.show_sidebar and section.blocks.size > 0 %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% comment %}Sidebar blocks count{% endcomment %}
+                </div>
+
+            </div>
+
+            {% if paginate.pages > 1 %}
+                <div class="collection-pagination">
+                    <div class="container">
+                        <div class="pagination">
+                            <div class="pagination__items">
+                                {{ paginate | default_pagination: 
+                                    next:'<i class="icon icon--right-t"></i><span class="icon-fallback__text">Next Page</span>',
+                                    previous: '<i class="icon icon--left-t"></i><span class="icon-fallback__text">Previous Page</span>'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endpaginate %}
+
+{% schema %}
+{
+    "name": "Product grid",
+    "class": "js-section__collection",
+    "settings": [
+        {
+            "type": "range",
+            "id": "grid",
+            "label": "Products per row (wide screens)",
+            "min": 2,
+            "max": 4,
+            "step": 1,
+            "default": 3
+        },
+        {
+            "type": "select",
+            "id": "grid_mobile",
+            "label": "Products per row (mobile)",
+            "default": "1",
+            "options": [
+                {
+                    "label": "1",
+                    "value": "1"
+                },
+                {
+                    "label": "2",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "rows",
+            "label": "Rows",
+            "min": 2,
+            "max": 12,
+            "step": 1,
+            "default": 6
+        },
+        {
+            "type": "checkbox",
+            "id": "sort_enable",
+            "label": "Enable sorting",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "show_sidebar",
+            "label": "Enable filter sidebar",
+            "default": true
+        }
+    ],
+    "blocks": [
+        {
+            "type": "filter",
+            "name": "Filter",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "paragraph",
+                    "content": "[Customize filters](/admin/menus)"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "count",
+                    "label": "Show product count",
+                    "default": false
+                }
+            ]
+        },
+        {
+            "type": "linklist",
+            "name": "Menu",
+            "settings": [
+                {
+                    "type": "link_list",
+                    "id": "linklist",
+                    "label": "Menu",
+                    "info": "This menu won't show dropdown items"
+                }
+            ]
+        },
+        {
+            "type": "tags",
+            "name": "Tags",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading",
+                    "default": "Tags"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}
